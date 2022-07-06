@@ -9,14 +9,14 @@
 #region Imports
 using System.Collections;
 using System.Collections.Generic;
-using static LanguageExt.Prelude;
+
 using UnityEngine;
 #endregion
 
 public class Test : MonoBehaviour
 {
     #region Variables
-    [SerializeField] SerializableValueTuple<int,string,int,bool,float,int,float,SerializableValueTuple<int>> _tuple;
+    [SerializeField] SerializableTuple<int,string> _tuple;
     #endregion
     
     #region Methods
@@ -25,7 +25,7 @@ public class Test : MonoBehaviour
     /// </summary>
     void Start()
     {
-        Debug.Log(_tuple.ToValueTuple());
+        Debug.Log(_tuple);
     }
 
     /// <summary>
