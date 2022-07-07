@@ -3,12 +3,14 @@
  * Copyright (c) All rights reserved to
  * !NullBool, NotNullBool
  * Contact info: notnullbool@gmail.com
- ****************************************/ 
+ ****************************************/
 #endregion
 
 #region Imports
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 using UnityEngine;
 #endregion
@@ -16,7 +18,7 @@ using UnityEngine;
 public class Test : MonoBehaviour
 {
     #region Variables
-    [SerializeField] SerializableTuple<int,string> _tuple;
+    [SerializeField] SerializableTuple<int,string,int,int,int,int,int,SerializableTuple<int>> _tuple;
     #endregion
     
     #region Methods
@@ -25,7 +27,7 @@ public class Test : MonoBehaviour
     /// </summary>
     void Start()
     {
-        Debug.Log(_tuple);
+        
     }
 
     /// <summary>
