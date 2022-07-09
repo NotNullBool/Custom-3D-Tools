@@ -18,7 +18,8 @@ using UnityEngine;
 public class Test : MonoBehaviour
 {
     #region Variables
-    [SerializeField] SerializableTuple<int,string,int,int,int,int,int,SerializableTuple<int>> _tuple;
+    [SerializeField] SerializableTuple<int,string,int,int,int,int,int,SerializableTuple<int>> _Tuple;
+    [SerializeField] SerializeableDictionary<string, int> _Dictionary = new SerializeableDictionary<string, int>();
     #endregion
     
     #region Methods
@@ -27,7 +28,10 @@ public class Test : MonoBehaviour
     /// </summary>
     void Start()
     {
-        
+        foreach (var kvp in _Dictionary)
+        {
+            Debug.Log($"{kvp.Key} {kvp.Value}");
+        }
     }
 
     /// <summary>
