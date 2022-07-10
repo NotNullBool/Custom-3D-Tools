@@ -9,9 +9,10 @@
 #region Imports
 using System.Collections;
 using System.Collections.Generic;
-using static LanguageExt.Prelude;
 using UnityEngine;
 using System;
+using System.Linq;
+using NullBool.Extensions;
 #endregion
 
 [System.Serializable]
@@ -20,6 +21,7 @@ public class SerializeableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, I
     #region Variables
     [UnityEngine.SerializeField] private List<SerializableTuple<TKey, TValue>> _KeyValuePairs = new List<SerializableTuple<TKey, TValue>>();
     private Dictionary<TKey, TValue> @this;
+    private (TKey key, TValue value, int? index) _TempKeyValuePair = (default(TKey), default(TValue), null);
     #endregion
 
     #region Methods
@@ -33,29 +35,40 @@ public class SerializeableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, I
     {
         _KeyValuePairs.Clear();
 
+        //Dictionary to tuple list
         foreach (var kvp in @this)
         {
             _KeyValuePairs.Add(
                 SerializableTuple.Create(kvp.Key, kvp.Value));
+        }
+
+        //Add empty value to inspector
+        if (_TempKeyValuePair.index.HasValue)
+        {
+            _KeyValuePairs.Add(SerializableTuple.Create(_TempKeyValuePair.key, _TempKeyValuePair.value));
         }
     }
 
     public void OnAfterDeserialize()
     {
         @this.Clear();
+        _TempKeyValuePair.index = null;
 
-        throw new NotImplementedException();
-
-        for (int i = 0; i < _KeyValuePairs.Length(); i++)
+        //Tuple list to dictionary if not empty
+        for (int index = 0; index < _KeyValuePairs.Count; index++)
         {
-            (TKey key, TValue value) = _KeyValuePairs[i];
-            if (@this.ContainsKey(key))
+            (TKey key, TValue value) = _KeyValuePairs[index];
+
+            if (!key.IsDefaultOrEmpty())
             {
-                _KeyValuePairs[i] = SerializableTuple.Create(default(TKey), default(TValue));
+                if (!@this.TryAdd(key, value) && _KeyValuePairs.GetLastIndexPostion() == index)
+                {
+                    _TempKeyValuePair.index = index;
+                }
             }
-            else
+            else if (_KeyValuePairs.GetLastIndexPostion() == index)
             {
-                @this.Add(key, value);
+                _TempKeyValuePair.index = index;
             }
         }
     }

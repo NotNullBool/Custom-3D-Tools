@@ -13,13 +13,16 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 using UnityEngine;
+using UnityEngine.InputSystem;
+
+using static UnityEngine.InputSystem.InputAction;
 #endregion
 
+[RequireComponent(typeof(PlayerInput))]
 public class Test : MonoBehaviour
 {
     #region Variables
-    [SerializeField] SerializableTuple<int,string,int,int,int,int,int,SerializableTuple<int>> _Tuple;
-    [SerializeField] SerializeableDictionary<string, int> _Dictionary = new SerializeableDictionary<string, int>();
+    private PlayerInput _PlayerScript;
     #endregion
     
     #region Methods
@@ -28,10 +31,9 @@ public class Test : MonoBehaviour
     /// </summary>
     void Start()
     {
-        foreach (var kvp in _Dictionary)
-        {
-            Debug.Log($"{kvp.Key} {kvp.Value}");
-        }
+        _PlayerScript = gameObject.GetComponent<PlayerInput>();
+        _PlayerScript.notificationBehavior = PlayerNotifications.InvokeCSharpEvents;
+        _PlayerScript.onActionTriggered += Fire;
     }
 
     /// <summary>
@@ -41,5 +43,17 @@ public class Test : MonoBehaviour
     {
         
     }
+
+    //private void Reset()
+    //{
+    //    var playerInput = GetComponent<PlayerInput>();
+    //    if (playerInput == null)
+    //    {
+    //        gameObject.AddComponent<PlayerInput>();
+    //    }
+    //    playerInput.hideFlags = HideFlags.HideInInspector;
+    //}
+    public void Fire(CallbackContext context) => Debug.Log($"action:{context.action.name}, type: {context.valueType}, performed: {context.phase}");
+
     #endregion Methods
 }
