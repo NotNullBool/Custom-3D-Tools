@@ -29,11 +29,11 @@ public class OnComponentRemoveAttribute : PropertyAttribute
     public OnComponentRemoveAttribute(string staticMethodToCall, string paramToCopyOnAddComponent = null)
     {
         throw new NotImplementedException();
-        if (staticMethodToCall.IsDefaultOrEmpty())
-        {
-            throw new ArgumentException($"{staticMethodToCall} isnt a method");
-        }
-        (StaticMethodToCall, ParameterForStaticMethod) = (staticMethodToCall, paramToCopyOnAddComponent);
+        //if (staticMethodToCall.IsDefaultOrEmpty())
+        //{
+        //    throw new ArgumentException($"{staticMethodToCall} isnt a method");
+        //}
+        //(StaticMethodToCall, ParameterForStaticMethod) = (staticMethodToCall, paramToCopyOnAddComponent);
         
     } 
 

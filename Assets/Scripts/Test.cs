@@ -13,27 +13,36 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 using static UnityEngine.InputSystem.InputAction;
 #endregion
 
+[ExecuteInEditMode]
 [RequireComponent(typeof(PlayerInput))]
 public class Test : MonoBehaviour
 {
     #region Variables
     private PlayerInput _PlayerScript;
+    [SerializeField][NaughtyAttributes.Expandable] private InputSettings _Settings;
     #endregion
-    
+
     #region Methods
+
+    private void OnValidate()
+    {
+        _Settings = InputSettings.Instance;
+    }
     /// <summary>
     /// <see cref="Start"/> is called before the first frame update
     /// </summary>
     void Start()
     {
-        _PlayerScript = gameObject.GetComponent<PlayerInput>();
+        _PlayerScript = GetComponent<PlayerInput>();
+        _Settings.ApplyToPlayerInput(_PlayerScript);
         _PlayerScript.notificationBehavior = PlayerNotifications.InvokeCSharpEvents;
-        _PlayerScript.onActionTriggered += Fire;
+        //Debug.Log(null);
     }
 
     /// <summary>
@@ -41,7 +50,22 @@ public class Test : MonoBehaviour
     /// </summary>
     void Update()
     {
-        
+        #if UNITY_EDITOR
+        //UpdateEditor();
+        #endif
+    }
+
+    private void UpdateEditor() 
+    {
+        if (_PlayerScript == null)
+        {
+            _PlayerScript = GetComponent<PlayerInput>();
+        }
+
+        foreach (var item in _PlayerScript.actions)
+        {
+            //item.activeControl.valueType;
+        }
     }
 
     //private void Reset()
