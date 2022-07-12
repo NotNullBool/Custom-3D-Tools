@@ -11,7 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UniRx;
 using UniRx.Triggers;
-
+using UnityEngine.InputSystem.UI;
 using UnityEditor.Presets;
 using NaughtyAttributes;
 using UnityEngine;
@@ -23,17 +23,23 @@ public class InputSettings : ScriptableObjectSingleton<InputSettings>
     #region Variables
     [Required("Input Action Asset Required")]
     [SerializeField] private InputActionAsset _InputActionsAsset;
-    [SerializeField] private UnityEngine.InputSystem.UI.InputSystemUIInputModule _InputSystemUIInputModule;
+    [SerializeField] private InputSystemUIInputModule _InputSystemUIInputModule;
     [SerializeField] private Camera _Camera;
 
 
     //Add functionality for presets as well
 
-    public void ApplyToPlayerInput(PlayerInput playerInput)
+    public void ApplyToPlayerInput(PlayerInput playerInput, InputActionAsset inputActions = null, InputSystemUIInputModule uIInputModule = null, Camera camera = null)
     {
-        playerInput.actions = _InputActionsAsset;
-        playerInput.uiInputModule = _InputSystemUIInputModule;
-        playerInput.camera = (_Camera != null) ? _Camera : Camera.main;
+        if (inputActions == null) inputActions = _InputActionsAsset;
+
+        if (uIInputModule == null) uIInputModule = _InputSystemUIInputModule;
+
+        if (camera == null) camera = (_Camera == null) ? Camera.main : _Camera;
+
+        playerInput.actions = inputActions;
+        playerInput.uiInputModule = uIInputModule;
+        playerInput.camera = camera;
     }
 
     #endregion
