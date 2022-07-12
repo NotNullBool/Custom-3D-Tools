@@ -3,7 +3,7 @@
  * Copyright (c) All rights reserved to
  * !NullBool, NotNullBool
  * Contact info: notnullbool@gmail.com
- ****************************************/ 
+ ****************************************/
 #endregion
 
 #region Imports
@@ -49,12 +49,4 @@ public class InputSettings : ScriptableObjectSingleton<InputSettings>
     }
 
 
-}
-
-public class TestingSingleton : ScriptableObjectSingleton<TestingSingleton>
-{
-    static TestingSingleton()
-    {
-        //p_ResourceFolderLocation =
-    }
 }

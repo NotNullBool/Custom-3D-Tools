@@ -313,10 +313,10 @@ GameObject:
   - component: {fileID: 2066482916}
   - component: {fileID: 2066482915}
   - component: {fileID: 2066482914}
-  - component: {fileID: 2066482920}
   - component: {fileID: 2066482922}
   - component: {fileID: 2066482924}
-  - component: {fileID: 2066482923}
+  - component: {fileID: 2066482926}
+  - component: {fileID: 2066482925}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -402,18 +402,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2066482920
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2066482912}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f90e8b6358306847aa504bda2ef9000, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &2066482922
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -426,7 +414,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Actions: {fileID: 0}
+  m_Actions: {fileID: -944628639613478452, guid: 6bb3e340ac46e5c4a8968ae7800e11f1, type: 3}
   m_NotificationBehavior: 3
   m_UIInputModule: {fileID: 0}
   m_DeviceLostEvent:
@@ -441,22 +429,9 @@ MonoBehaviour:
   m_ActionEvents: []
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: 
+  m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &2066482923
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2066482912}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 069c153497c982d4292b48ec368fda65, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _ChangeValue: 
 --- !u!114 &2066482924
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -470,3 +445,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Settings: {fileID: 11400000, guid: 6b3a685db2524e2408b0e4774fa66492, type: 2}
+--- !u!114 &2066482925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2066482912}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 069c153497c982d4292b48ec368fda65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2066482926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2066482912}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 069c153497c982d4292b48ec368fda65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
