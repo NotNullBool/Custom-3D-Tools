@@ -25,6 +25,8 @@ public class InputSettings : ScriptableObjectSingleton<InputSettings>
     [SerializeField] private InputActionAsset _InputActionsAsset;
     [SerializeField] private UnityEngine.InputSystem.UI.InputSystemUIInputModule _InputSystemUIInputModule;
     [SerializeField] private Camera _Camera;
+
+
     //Add functionality for presets as well
 
     public void ApplyToPlayerInput(PlayerInput playerInput)
@@ -35,4 +37,18 @@ public class InputSettings : ScriptableObjectSingleton<InputSettings>
     }
 
     #endregion
+    static InputSettings()
+    {
+        
+    }
+
+
+}
+
+public class TestingSingleton : ScriptableObjectSingleton<TestingSingleton>
+{
+    static TestingSingleton()
+    {
+        //p_ResourceFolderLocation =
+    }
 }
