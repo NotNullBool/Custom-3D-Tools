@@ -15,14 +15,22 @@ using UniRx;
 using UniRx.Triggers;
 using UnityEditor;
 using UnityEngine;
-using static UnityEditorInternal.ReorderableList;
 #endregion
 
 public abstract class ScriptableObjectSingleton<T> : ScriptableObject where T : ScriptableObjectSingleton<T>
 {
     #region Variables    
-    protected static string p_PathInsideResourceFolder = "ScriptableObjects";
-    protected static string p_ResourceFolderLocation = "Assets";
+    private const string DEFAULT_PATH_INSIDE_RESOURCE_FOLDER = "ScriptableObjects";
+
+    private static string _PathInsideResourceFolder = null;
+    protected static string p_PathInsideResourceFolder { get => _PathInsideResourceFolder?? DEFAULT_RESOURCE_FOLDER_PATH;
+                                                         set => _PathInsideResourceFolder = _PathInsideResourceFolder ?? value; }
+
+    private const string DEFAULT_RESOURCE_FOLDER_PATH = "Assets";
+
+    private static string _ResourceFolderPath = null;
+    protected static string p_ResourceFolderPath { get => _ResourceFolderPath ?? DEFAULT_RESOURCE_FOLDER_PATH;
+                                                   set => _ResourceFolderPath = _ResourceFolderPath ?? value; }
 
     protected static bool p_UseEditorDefaultResourcesFolder = false;
 
@@ -47,8 +55,8 @@ public abstract class ScriptableObjectSingleton<T> : ScriptableObject where T : 
                     
                     T asset = ScriptableObject.CreateInstance<T>();
 
-                    string assetPath = !p_UseEditorDefaultResourcesFolder ? $"{p_ResourceFolderLocation}/{RESOURCES}/{p_PathInsideResourceFolder}" :
-                                                                                         $"{ASSETS}/{EDITOR_DEFAULT_RESOURCES}/{p_PathInsideResourceFolder}";
+                    string assetPath = !p_UseEditorDefaultResourcesFolder ? $"{p_ResourceFolderPath}/{RESOURCES}/{p_PathInsideResourceFolder}" :
+                                                                            $"{ASSETS}/{EDITOR_DEFAULT_RESOURCES}/{p_PathInsideResourceFolder}";
                     string[] folders = assetPath.Split("/");
                     for (int i = 0; i < folders.Length; i++)
                     {

@@ -21,7 +21,7 @@ public class Test : MonoBehaviour
     [SerializeField]private string _ChangeValue;
     private void OnValidate()
     {
-        _ = TestingSingleton.Instance;
+        
     }
     #endregion
     #region Methods

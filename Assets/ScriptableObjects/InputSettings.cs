@@ -50,11 +50,3 @@ public class InputSettings : ScriptableObjectSingleton<InputSettings>
 
 
 }
-
-public class TestingSingleton : ScriptableObjectSingleton<TestingSingleton>
-{
-    static TestingSingleton()
-    {
-        //p_ResourceFolderLocation =
-    }
-}
