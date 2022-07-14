@@ -3,7 +3,7 @@
  * Copyright (c) All rights reserved to
  * !NullBool, NotNullBool
  * Contact info: notnullbool@gmail.com
- ****************************************/ 
+ ****************************************/
 #endregion
 
 #region Imports

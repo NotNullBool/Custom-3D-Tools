@@ -18,11 +18,6 @@ public class Test : MonoBehaviour
 {
     #region Variables
 
-    [SerializeField]private string _ChangeValue;
-    private void OnValidate()
-    {
-        
-    }
     #endregion
     #region Methods
     /// <summary>
@@ -30,7 +25,7 @@ public class Test : MonoBehaviour
     /// </summary>
     void Start()
     {
-        
+        Debug.Log("Start");
     }
 
     /// <summary>
