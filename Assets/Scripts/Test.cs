@@ -14,6 +14,7 @@ using UniRx.Triggers;
 using UnityEngine;
 #endregion
 
+[OnComponentRemove("hi")]
 public class Test : MonoBehaviour
 {
     #region Variables
@@ -24,16 +25,8 @@ public class Test : MonoBehaviour
     /// <see cref="Start"/> is called before the first frame update
     /// </summary>
     void Start()
-    {
-        Debug.Log("Start");
-    }
-
-    /// <summary>
-    /// <see cref="Update"/> is called once per frame
-    /// </summary>
-    void Update()
-    {
-        
+    {     
+        Observable.EveryUpdate().Subscribe(_ => Debug.Log("Hello world update"));
     }
     #endregion Methods
 }

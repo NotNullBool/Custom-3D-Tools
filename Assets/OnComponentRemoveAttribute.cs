@@ -28,15 +28,21 @@ public class OnComponentRemoveAttribute : PropertyAttribute
     #region Methods
     public OnComponentRemoveAttribute(string staticMethodToCall, string paramToCopyOnAddComponent = null)
     {
-        throw new NotImplementedException();
-        //if (staticMethodToCall.IsDefaultOrEmpty())
-        //{
-        //    throw new ArgumentException($"{staticMethodToCall} isnt a method");
-        //}
-        //(StaticMethodToCall, ParameterForStaticMethod) = (staticMethodToCall, paramToCopyOnAddComponent);
         
-    } 
+        if (staticMethodToCall.IsDefaultOrEmpty())
+        {
+            throw new ArgumentException($"{staticMethodToCall} isnt a method");
+        }
+        (StaticMethodToCall, ParameterForStaticMethod) = (staticMethodToCall, paramToCopyOnAddComponent);
 
+    }
+
+
+    //[InitializeOnLoadMethod]
+    //public static void HelloWorld() => EditorObservable.EveryCreateInspectorGUI.Select(x =>
+    //{
+    //    return x.Target.GetType().GetCustomAttribute<OnComponentRemoveAttribute>();
+    //}).Where(x => x != null).Subscribe(x => Debug.Log(x.StaticMethodToCall)); 
     public void Deconstruct(out string staticMethodToCall, out string parameterForStaticMethod) => (staticMethodToCall, parameterForStaticMethod) = 
                                                                                                    (StaticMethodToCall, ParameterForStaticMethod);
     #endregion Methods
