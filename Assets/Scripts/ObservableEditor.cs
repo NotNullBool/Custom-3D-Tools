@@ -20,12 +20,9 @@ using UnityEngine.UIElements;
 
 [CustomEditor(typeof(MonoBehaviour),true)]
 [CanEditMultipleObjects]
-public class EditorObservable : Editor
+public class ObservableEditor : Editor
 {
     #region Variables
-
-    private static Subject<(SerializedObject SerializedObject, UnityEngine.Object Target)> _EveryCreateInspectorGUI = new Subject<(SerializedObject, UnityEngine.Object)> ();
-    public static IObservable<(SerializedObject SerializedObject, UnityEngine.Object Target)> EveryCreateInspectorGUI = _EveryCreateInspectorGUI.AsObservable();
 
     #endregion
 
@@ -36,24 +33,38 @@ public class EditorObservable : Editor
         //Do something?
     }
 
+    private static Subject<(SerializedObject SerializedObject, UnityEngine.Object Target)> _EveryCreateInspectorGUI = new Subject<(SerializedObject, UnityEngine.Object)> ();
+    public static IObservable<(SerializedObject SerializedObject, UnityEngine.Object Target)> EveryCreateInspectorGUI = _EveryCreateInspectorGUI.AsObservable();
+
     public override VisualElement CreateInspectorGUI()
     {
         _EveryCreateInspectorGUI.OnNext((serializedObject, target));
         return base.CreateInspectorGUI();
     }
 
+    private static Subject<(SerializedObject SerializedObject, UnityEngine.Object Target, Rect PreviewArea)> _EveryDrawPreview = new Subject<(SerializedObject, UnityEngine.Object, Rect)>();
+    public static IObservable<(SerializedObject SerializedObject, UnityEngine.Object Target, Rect PreviewArea)> EveryDrawPreview = _EveryDrawPreview.AsObservable();
+
     public override void DrawPreview(Rect previewArea)
     {
+        _EveryDrawPreview.OnNext((serializedObject, target, previewArea));
         base.DrawPreview(previewArea);
     }
 
+    private static Subject<(SerializedObject SerializedObject, UnityEngine.Object Target)> _EveryGetInfoString = new Subject<(SerializedObject, UnityEngine.Object)>();
+    public static IObservable<(SerializedObject SerializedObject, UnityEngine.Object Target)> EveryGetInfoString = _EveryGetInfoString.AsObservable();
     public override string GetInfoString()
     {
+        _EveryGetInfoString.OnNext((serializedObject, target));
         return base.GetInfoString();
     }
 
+    private static Subject<(SerializedObject SerializedObject, UnityEngine.Object Target)> _EveryGetPreviewTitle = new Subject<(SerializedObject, UnityEngine.Object)>();
+    public static IObservable<(SerializedObject SerializedObject, UnityEngine.Object Target)> EveryGetPreviewTitle = _EveryGetPreviewTitle.AsObservable();
+
     public override GUIContent GetPreviewTitle()
     {
+        _EveryGetPreviewTitle.OnNext((serializedObject, target));
         return base.GetPreviewTitle();
     }
 

@@ -28,7 +28,6 @@ public class OnComponentRemoveAttribute : PropertyAttribute
     #region Methods
     public OnComponentRemoveAttribute(string staticMethodToCall, string paramToCopyOnAddComponent = null)
     {
-        
         if (staticMethodToCall.IsDefaultOrEmpty())
         {
             throw new ArgumentException($"{staticMethodToCall} isnt a method");
