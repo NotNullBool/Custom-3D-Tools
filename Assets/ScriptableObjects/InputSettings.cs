@@ -14,6 +14,8 @@ using UniRx.Triggers;
 using UnityEngine.InputSystem.UI;
 using UnityEditor.Presets;
 using NaughtyAttributes;
+using LanguageExt;
+using static LanguageExt.Prelude;
 using UnityEngine;
 using UnityEngine.InputSystem;
 #endregion
@@ -23,7 +25,7 @@ public class InputSettings : ScriptableObjectSingleton<InputSettings>
     #region Variables
     [Required("Input Action Asset Required")]
     [SerializeField] private InputActionAsset _InputActionsAsset;
-    [SerializeField] private InputSystemUIInputModule _InputSystemUIInputModule;
+    [SerializeField] private InputSystemUIInputModule _UIInputModule;
     [SerializeField] private Camera _Camera;
 
 
@@ -31,15 +33,15 @@ public class InputSettings : ScriptableObjectSingleton<InputSettings>
 
     public void ApplyToPlayerInput(PlayerInput playerInput, InputActionAsset inputActions = null, InputSystemUIInputModule uIInputModule = null, Camera camera = null)
     {
-        if (inputActions == null) inputActions = _InputActionsAsset;
+        playerInput.actions = Optional(inputActions).
+            IfNoneUnsafe(_InputActionsAsset);
 
-        if (uIInputModule == null) uIInputModule = _InputSystemUIInputModule;
+        playerInput.uiInputModule = Optional(uIInputModule).
+            IfNoneUnsafe(_UIInputModule);
 
-        if (camera == null) camera = (_Camera == null) ? Camera.main : _Camera;
-
-        playerInput.actions = inputActions;
-        playerInput.uiInputModule = uIInputModule;
-        playerInput.camera = camera;
+        playerInput.camera = Optional(camera).IfNoneUnsafe(
+            Optional(_Camera).
+            IfNoneUnsafe(Camera.main));
     }
 
     #endregion

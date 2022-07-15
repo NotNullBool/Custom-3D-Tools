@@ -11,6 +11,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
+using LanguageExt;
+using static LanguageExt.Prelude;
 using UniRx;
 using UniRx.Triggers;
 using UnityEditor;
@@ -43,41 +45,52 @@ public abstract class ScriptableObjectSingleton<T> : ScriptableObject where T : 
     {
         get
         {
-            if (_Instance == null)
-            {
-                var assetLocation = $"{p_PathInsideResourceFolder}/{typeof(T).ToString()}";
+            return Optional(_Instance).IfNone(() => 
+            { 
+                LoadAsset(); 
 
-                _Instance = !p_UseEditorDefaultResourcesFolder ? (T)Resources.Load(assetLocation) :
-                                                                 (T)EditorGUIUtility.Load(assetLocation);
-                
-                if (_Instance == null)
+                var instance = Optional(_Instance).IfNone(() =>
                 {
-                    
-                    T asset = ScriptableObject.CreateInstance<T>();
+                    CreateAsset();
+                    return _Instance;
+                });
 
-                    string assetPath = !p_UseEditorDefaultResourcesFolder ? $"{p_ResourceFolderPath}/{RESOURCES}/{p_PathInsideResourceFolder}" :
-                                                                            $"{ASSETS}/{EDITOR_DEFAULT_RESOURCES}/{p_PathInsideResourceFolder}";
-                    string[] folders = assetPath.Split("/");
-                    for (int i = 0; i < folders.Length; i++)
-                    {
-                        int previousFolderIndex = i > 0 ? i - 1 : 0;
+                instance.OnInit();
 
-                        string iterFolderPath = string.Join('/', folders[0..(previousFolderIndex)]);
-
-                        if (!AssetDatabase.IsValidFolder($"{iterFolderPath}/{folders[i]}")) 
-                            AssetDatabase.CreateFolder(iterFolderPath, folders[i]);
-                    }
-
-                    AssetDatabase.CreateAsset(asset, $"{assetPath}/{typeof(T).ToString()}.asset");
-                    AssetDatabase.SaveAssets();
-
-                    _Instance = asset;
-
-                }
-                _Instance.OnInit();
-            }
-            return _Instance;
+                return instance;
+            });
         }
+    }
+
+    private static void CreateAsset()
+    {
+        T asset = ScriptableObject.CreateInstance<T>();
+
+        string assetPath = !p_UseEditorDefaultResourcesFolder ? $"{p_ResourceFolderPath}/{RESOURCES}/{p_PathInsideResourceFolder}" :
+                                                                $"{ASSETS}/{EDITOR_DEFAULT_RESOURCES}/{p_PathInsideResourceFolder}";
+        string[] folders = assetPath.Split("/");
+        for (int i = 0; i < folders.Length; i++)
+        {
+            int previousFolderIndex = i > 0 ? i - 1 : 0;
+
+            string iterFolderPath = string.Join('/', folders[0..(previousFolderIndex)]);
+
+            if (!AssetDatabase.IsValidFolder($"{iterFolderPath}/{folders[i]}"))
+                AssetDatabase.CreateFolder(iterFolderPath, folders[i]);
+        }
+
+        AssetDatabase.CreateAsset(asset, $"{assetPath}/{typeof(T).ToString()}.asset");
+        AssetDatabase.SaveAssets();
+
+        _Instance = asset;
+    }
+
+    private static void LoadAsset()
+    {
+        var assetLocation = $"{p_PathInsideResourceFolder}/{typeof(T).ToString()}";
+
+        _Instance = !p_UseEditorDefaultResourcesFolder ? (T)Resources.Load(assetLocation) :
+                                                         (T)EditorGUIUtility.Load(assetLocation);
     }
     #endregion
     #region Methods

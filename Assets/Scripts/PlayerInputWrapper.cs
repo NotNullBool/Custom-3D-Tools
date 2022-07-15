@@ -12,6 +12,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
+using LanguageExt;
+using static LanguageExt.Prelude;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -39,7 +41,8 @@ public class PlayerInputWrapper : MonoBehaviour
     /// </summary>
     void Start()
     {
-        _PlayerScript = GetComponent<PlayerInput>();
+        _PlayerScript = Optional(_PlayerScript).
+                        IfNoneUnsafe(GetComponent<PlayerInput>());
         _Settings.ApplyToPlayerInput(_PlayerScript);
         _PlayerScript.notificationBehavior = PlayerNotifications.InvokeCSharpEvents;
         //Debug.Log(null);
@@ -57,10 +60,8 @@ public class PlayerInputWrapper : MonoBehaviour
 
     private void UpdateEditor() 
     {
-        if (_PlayerScript == null)
-        {
-            _PlayerScript = GetComponent<PlayerInput>();
-        }
+        _PlayerScript = Optional(_PlayerScript).
+                        IfNoneUnsafe(GetComponent<PlayerInput>());
 
         foreach (var item in _PlayerScript.actions)
         {
