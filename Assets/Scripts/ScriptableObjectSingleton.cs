@@ -23,7 +23,7 @@ public abstract class ScriptableObjectSingleton<T> : ScriptableObject where T : 
     private const string DEFAULT_PATH_INSIDE_RESOURCE_FOLDER = "ScriptableObjects";
 
     private static string _PathInsideResourceFolder = null;
-    protected static string p_PathInsideResourceFolder { get => _PathInsideResourceFolder?? DEFAULT_RESOURCE_FOLDER_PATH;
+    protected static string p_PathInsideResourceFolder { get => _PathInsideResourceFolder?? DEFAULT_PATH_INSIDE_RESOURCE_FOLDER;
                                                          set => _PathInsideResourceFolder = _PathInsideResourceFolder ?? value; }
 
     private const string DEFAULT_RESOURCE_FOLDER_PATH = "Assets";
