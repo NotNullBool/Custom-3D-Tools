@@ -19,7 +19,7 @@ using UnityEngine.UIElements;
 #endregion
 
 [CustomEditor(typeof(MonoBehaviour),true)]
-[CanEditMultipleObjects]
+[CanEditMultipleObjects()]
 public class ObservableEditor : Editor
 {
     #region Variables
@@ -27,22 +27,18 @@ public class ObservableEditor : Editor
     #endregion
 
     #region Methods
-    [InitializeOnLoadMethod]
-    static void OnLoad()
-    {
-        //Do something?
-    }
 
-    private static Subject<(SerializedObject SerializedObject, UnityEngine.Object Target)> _EveryCreateInspectorGUI = new Subject<(SerializedObject, UnityEngine.Object)> ();
-    public static IObservable<(SerializedObject SerializedObject, UnityEngine.Object Target)> EveryCreateInspectorGUI = _EveryCreateInspectorGUI.AsObservable();
+    private static Subject<(SerializedObject, UnityEngine.Object, VisualElement)> _EveryCreateInspectorGUI = new Subject<(SerializedObject, UnityEngine.Object, VisualElement)> ();
+    public static IObservable<(SerializedObject SerializedObject, UnityEngine.Object Target, VisualElement @base)> EveryCreateInspectorGUI = _EveryCreateInspectorGUI.AsObservable();
 
     public override VisualElement CreateInspectorGUI()
     {
-        _EveryCreateInspectorGUI.OnNext((serializedObject, target));
-        return base.CreateInspectorGUI();
+        var @base = base.CreateInspectorGUI();
+        _EveryCreateInspectorGUI.OnNext((serializedObject, target, @base));
+        return @base;
     }
 
-    private static Subject<(SerializedObject SerializedObject, UnityEngine.Object Target, Rect PreviewArea)> _EveryDrawPreview = new Subject<(SerializedObject, UnityEngine.Object, Rect)>();
+    private static Subject<(SerializedObject, UnityEngine.Object, Rect)> _EveryDrawPreview = new Subject<(SerializedObject, UnityEngine.Object, Rect)>();
     public static IObservable<(SerializedObject SerializedObject, UnityEngine.Object Target, Rect PreviewArea)> EveryDrawPreview = _EveryDrawPreview.AsObservable();
 
     public override void DrawPreview(Rect previewArea)
@@ -51,78 +47,166 @@ public class ObservableEditor : Editor
         base.DrawPreview(previewArea);
     }
 
-    private static Subject<(SerializedObject SerializedObject, UnityEngine.Object Target)> _EveryGetInfoString = new Subject<(SerializedObject, UnityEngine.Object)>();
-    public static IObservable<(SerializedObject SerializedObject, UnityEngine.Object Target)> EveryGetInfoString = _EveryGetInfoString.AsObservable();
+    private static Subject<(SerializedObject, UnityEngine.Object, string)> _EveryGetInfoString = new Subject<(SerializedObject, UnityEngine.Object, string)>();
+    public static IObservable<(SerializedObject SerializedObject, UnityEngine.Object Target, string @base)> EveryGetInfoString = _EveryGetInfoString.AsObservable();
     public override string GetInfoString()
     {
-        _EveryGetInfoString.OnNext((serializedObject, target));
-        return base.GetInfoString();
+        var @base = base.GetInfoString();
+        _EveryGetInfoString.OnNext((serializedObject, target, @base));
+        return @base;
     }
 
-    private static Subject<(SerializedObject SerializedObject, UnityEngine.Object Target)> _EveryGetPreviewTitle = new Subject<(SerializedObject, UnityEngine.Object)>();
-    public static IObservable<(SerializedObject SerializedObject, UnityEngine.Object Target)> EveryGetPreviewTitle = _EveryGetPreviewTitle.AsObservable();
+    private static Subject<(SerializedObject, UnityEngine.Object, GUIContent)> _EveryGetPreviewTitle = new Subject<(SerializedObject, UnityEngine.Object, GUIContent)>();
+    public static IObservable<(SerializedObject SerializedObject, UnityEngine.Object Target, GUIContent @base)> EveryGetPreviewTitle = _EveryGetPreviewTitle.AsObservable();
 
     public override GUIContent GetPreviewTitle()
     {
-        _EveryGetPreviewTitle.OnNext((serializedObject, target));
-        return base.GetPreviewTitle();
+        var @base = base.GetPreviewTitle();
+        _EveryGetPreviewTitle.OnNext((serializedObject, target, @base));
+        return @base;
     }
 
+    private static Subject<(SerializedObject, UnityEngine.Object, bool)> _EveryHasPreviewGUI = new Subject<(SerializedObject, UnityEngine.Object, bool)>();
+    public static IObservable<(SerializedObject SerializedObject, UnityEngine.Object Target, bool @base)> EveryHasPreviewGUI = _EveryHasPreviewGUI.AsObservable();
     public override bool HasPreviewGUI()
     {
-        return base.HasPreviewGUI();
+        var @base = base.HasPreviewGUI();
+        _EveryHasPreviewGUI.OnNext((serializedObject, target, @base));
+        return @base;
     }
-
+    private static Subject<(SerializedObject, UnityEngine.Object[])> _EveryOnInspectorGUI = new Subject<(SerializedObject, UnityEngine.Object[])>();
+    public static IObservable<(SerializedObject SerializedObject, UnityEngine.Object[] Targets)> EveryOnInspectorGUI = _EveryOnInspectorGUI.AsObservable();
     public override void OnInspectorGUI()
     {
+        _EveryOnInspectorGUI.OnNext((serializedObject, targets));
         base.OnInspectorGUI();
     }
 
+    private static Subject<(SerializedObject, UnityEngine.Object, Rect, GUIStyle)> _EveryOnInteractivePreviewGUI = new Subject<(SerializedObject, UnityEngine.Object, Rect, GUIStyle)>();
+    public static IObservable<(SerializedObject SerializedObject, UnityEngine.Object Target, Rect R, GUIStyle Background)> EveryOnInteractivePreviewGUI = _EveryOnInteractivePreviewGUI.AsObservable();
     public override void OnInteractivePreviewGUI(Rect r, GUIStyle background)
     {
+        _EveryOnInteractivePreviewGUI.OnNext((serializedObject, target, r, background));
         base.OnInteractivePreviewGUI(r, background);
     }
 
+    private static Subject<(UnityEngine.Object, Rect, GUIStyle)> _EveryOnPreviewGUI = new Subject<(UnityEngine.Object, Rect, GUIStyle)>();
+    public static IObservable<(UnityEngine.Object Target, Rect R, GUIStyle Background)> EveryOnPreviewGUI = _EveryOnPreviewGUI.AsObservable();
     public override void OnPreviewGUI(Rect r, GUIStyle background)
     {
+        _EveryOnPreviewGUI.OnNext((target, r, background));
         base.OnPreviewGUI(r, background);
     }
 
+    private static Subject<(SerializedObject, UnityEngine.Object)> _EveryOnPreviewSettings = new Subject<(SerializedObject, UnityEngine.Object)>();
+    public static IObservable<(SerializedObject SerializedObject, UnityEngine.Object Target)> EveryOnPreviewSettings = _EveryOnPreviewSettings.AsObservable();
     public override void OnPreviewSettings()
     {
+        _EveryOnPreviewSettings.OnNext((serializedObject, target));
         base.OnPreviewSettings();
     }
 
+    private static Subject<(SerializedObject, UnityEngine.Object)> _EveryReloadPreviewInstances = new Subject<(SerializedObject, UnityEngine.Object)>();
+    public static IObservable<(SerializedObject SerializedObject, UnityEngine.Object Target)> EveryReloadPreviewInstances = _EveryReloadPreviewInstances.AsObservable();
     public override void ReloadPreviewInstances()
     {
+        _EveryReloadPreviewInstances.OnNext((serializedObject, target));
         base.ReloadPreviewInstances();
     }
 
+
+    private static Subject<(SerializedObject, UnityEngine.Object, string, UnityEngine.Object[], int, int, Texture2D)> _EveryRenderStaticPreview = new Subject<(SerializedObject, UnityEngine.Object, string, UnityEngine.Object[], int, int, Texture2D)>();
+    public static IObservable<(SerializedObject SerializedObject, UnityEngine.Object Target, string AssetPath, UnityEngine.Object[] SubAssets, int Width, int Height, Texture2D @base)> EveryRenderStaticPreview = _EveryRenderStaticPreview.AsObservable();
     public override Texture2D RenderStaticPreview(string assetPath, UnityEngine.Object[] subAssets, int width, int height)
     {
-        return base.RenderStaticPreview(assetPath, subAssets, width, height);
+        var @base = base.RenderStaticPreview(assetPath, subAssets, width, height);
+        _EveryRenderStaticPreview.OnNext((serializedObject, target, assetPath, subAssets, width, height, @base));
+        return @base;
     }
 
+    private static Subject<(SerializedObject, UnityEngine.Object, bool)> _EveryRequiresConstantRepaint = new Subject<(SerializedObject, UnityEngine.Object, bool)>();
+    public static IObservable<(SerializedObject SerializedObject, UnityEngine.Object Target, bool @base)> EveryRequiresConstantRepaint = _EveryRequiresConstantRepaint.AsObservable();
     public override bool RequiresConstantRepaint()
     {
-        return base.RequiresConstantRepaint();
+        var @base = base.RequiresConstantRepaint();
+        _EveryRequiresConstantRepaint.OnNext((serializedObject, target, @base));
+        return @base;
     }
 
+    private static Subject<(SerializedObject, UnityEngine.Object, bool)> _EveryUseDefaultMargins = new Subject<(SerializedObject, UnityEngine.Object, bool)>();
+    public static IObservable<(SerializedObject SerializedObject, UnityEngine.Object Target, bool @base)> EveryUseDefaultMargins = _EveryUseDefaultMargins.AsObservable();
     public override bool UseDefaultMargins()
     {
-        return base.UseDefaultMargins();
+        var @base = base.UseDefaultMargins();
+        _EveryUseDefaultMargins.OnNext((serializedObject, target, @base));
+        return @base;
     }
 
+    private static Subject<(SerializedObject, UnityEngine.Object, bool)> _EveryShouldHideOpenButton = new Subject<(SerializedObject, UnityEngine.Object, bool)>();
+    public static IObservable<(SerializedObject SerializedObject, UnityEngine.Object Target, bool @base)> EveryShouldHideOpenButton = _EveryShouldHideOpenButton.AsObservable();
+    protected override bool ShouldHideOpenButton()
+    {
+        var @base = base.ShouldHideOpenButton();
+        _EveryShouldHideOpenButton.OnNext((serializedObject, target, @base));
+        return @base;
+    }
+
+    private static Subject<(SerializedObject, UnityEngine.Object)> _EveryOnHeaderGUI = new Subject<(SerializedObject, UnityEngine.Object)>();
+    public static IObservable<(SerializedObject SerializedObject, UnityEngine.Object Target)> EveryOnHeaderGUI = _EveryOnHeaderGUI.AsObservable();
     protected override void OnHeaderGUI()
     {
+        _EveryOnHeaderGUI.OnNext((serializedObject, target));
         base.OnHeaderGUI();
     }
 
-    protected override bool ShouldHideOpenButton()
+    private static Subject<UnityEngine.Object> _EveryOnDestroy = new Subject<UnityEngine.Object>();
+    public static IObservable<UnityEngine.Object> EveryOnDestroy = _EveryOnDestroy.AsObservable();
+    private void OnDestroy()
     {
-        return base.ShouldHideOpenButton();
+        _EveryOnDestroy.OnNext(target);
+    }
+
+    private static Subject<(SerializedObject, UnityEngine.Object)> _EveryOnEnable = new Subject<(SerializedObject, UnityEngine.Object)>();
+    public static IObservable<(SerializedObject SerializedObject, UnityEngine.Object Target)> EveryOnEnable = _EveryOnEnable.AsObservable();
+    private void OnEnable()
+    {
+        _EveryOnEnable.OnNext((serializedObject, target));
+    }
+
+    private static Subject<(SerializedObject, UnityEngine.Object)> _EveryOnDisable = new Subject<(SerializedObject, UnityEngine.Object)>();
+    public static IObservable<(SerializedObject SerializedObject, UnityEngine.Object Target)> EveryOnDisable = _EveryOnDisable.AsObservable();
+    private void OnDisable()
+    {
+        _EveryOnDisable.OnNext((serializedObject, target));
+    }
+
+    private static Subject<UnityEngine.Object> _EveryOnSceneGUI = new Subject<UnityEngine.Object>();
+    public static IObservable<UnityEngine.Object> EveryOnSceneGUI = _EveryOnSceneGUI.AsObservable();
+    private void OnSceneGUI()
+    {
+        _EveryOnSceneGUI.OnNext(target);
+    }
+
+    private static Subject<(SerializedObject, UnityEngine.Object)> _EveryOnValidate = new Subject<(SerializedObject, UnityEngine.Object)>();
+    public static IObservable<(SerializedObject SerializedObject, UnityEngine.Object Target)> EveryOnValidate = _EveryOnValidate.AsObservable();
+    private void OnValidate()
+    {
+        _EveryOnValidate.OnNext((serializedObject, target));
+    }
+
+    private static Subject<(SerializedObject, UnityEngine.Object)> _EveryAwake = new Subject<(SerializedObject, UnityEngine.Object)>();
+    public static IObservable<(SerializedObject SerializedObject, UnityEngine.Object Target)> EveryAwake = _EveryAwake.AsObservable();
+    private void Awake()
+    {
+        _EveryAwake.OnNext((serializedObject, target));
     }
 
 
+    private static Subject<(SerializedObject, UnityEngine.Object)> _EveryReset = new Subject<(SerializedObject, UnityEngine.Object)>();
+    public static IObservable<(SerializedObject SerializedObject, UnityEngine.Object Target)> EveryReset = _EveryReset.AsObservable();
+    private void Reset()
+    {
+        _EveryReset.OnNext((serializedObject, target));
+    }
     #endregion Methods
 }

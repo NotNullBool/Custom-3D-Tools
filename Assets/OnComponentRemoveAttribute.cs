@@ -15,85 +15,66 @@ using UniRx.Triggers;
 using UnityEngine;
 using UnityEditor;
 using System.Reflection;
+using System.Linq;
 using NullBool.Extensions;
+using System.Linq.Expressions;
 #endregion
 
-[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-public class OnComponentRemoveAttribute : PropertyAttribute
+[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+public class OnComponentRemoveMethodAttribute : PropertyAttribute
 {
     #region Variables
-    public string StaticMethodToCall;
-    public string ParameterForStaticMethod;
     #endregion
     #region Methods
-    public OnComponentRemoveAttribute(string staticMethodToCall, string paramToCopyOnAddComponent = null)
+    public OnComponentRemoveMethodAttribute()
     {
-        if (staticMethodToCall.IsDefaultOrEmpty())
-        {
-            throw new ArgumentException($"{staticMethodToCall} isnt a method");
-        }
-        (StaticMethodToCall, ParameterForStaticMethod) = (staticMethodToCall, paramToCopyOnAddComponent);
 
     }
 
 
-    //[InitializeOnLoadMethod]
-    //public static void HelloWorld() => EditorObservable.EveryCreateInspectorGUI.Select(x =>
-    //{
-    //    return x.Target.GetType().GetCustomAttribute<OnComponentRemoveAttribute>();
-    //}).Where(x => x != null).Subscribe(x => Debug.Log(x.StaticMethodToCall)); 
-    public void Deconstruct(out string staticMethodToCall, out string parameterForStaticMethod) => (staticMethodToCall, parameterForStaticMethod) = 
-                                                                                                   (StaticMethodToCall, ParameterForStaticMethod);
+    [InitializeOnLoadMethod]
+    public static void OnComponentRemoved() => ObservableEditor.EveryOnDisable.Select(x =>
+    {
+        var methods = x.Target.GetType().GetMethods().Where(method =>
+        {
+            bool hasAttribute = method.GetCustomAttribute<OnComponentRemoveMethodAttribute>() != null;
+            if (hasAttribute && !method.IsStatic)
+            {
+                Debug.Assert(method.IsStatic, $"Method: {method.Name} in: {method.DeclaringType} is not static.");
+            }
+            return hasAttribute;
+        });
+
+        object[] @params = new object[1] { x.Target };
+
+        foreach (var method in methods)
+        {
+            string DefaultErrorMessage() => $"Method: {method.Name} in: {method.DeclaringType} params are not 0 or 1 and equal to {@params[0].GetType()}";
+
+            var methodParams = method.GetParameters();
+
+            switch (methodParams.Length)
+            {
+                case 0:
+                    break;
+                case 1:
+                    if (methodParams[0].GetType() != @params[0].GetType())
+                    {
+                        break;
+                    }
+                    goto default;
+                default:
+                    Debug.Assert(false, DefaultErrorMessage());
+                    break;
+            }
+        }
+        return (methods: methods, @params: @params , Target: x.Target);
+    }).Where(x => x.methods.Length() != 0).Subscribe(x =>
+    {
+        foreach (var method in x.methods)
+        {
+
+        }
+    });
     #endregion Methods
 }
-
-//[CustomEditor(typeof(Test))]
-//[CanEditMultipleObjects]
-//public class OnComponentRemoveAttributeEditor : Editor
-//{
-//    Type _TargetType;
-//    dynamic[] _Parameters = null;
-//    MethodInfo _StaticMethod;
-
-//    private void Reset()
-//    {
-//        Debug.Log("reset");
-//        if (target != null)
-//        {
-//            _TargetType = target.GetType();
-//            (string staticMethodName, string paramNameForMethod) = _TargetType.GetCustomAttribute<OnComponentRemoveAttribute>();
-//            if (!paramNameForMethod.IsDefaultOrEmpty())
-//            {
-//                var param = _TargetType.GetField(paramNameForMethod);
-//                if (param.GetType().IsArray)
-//                {
-//                    var array = (Array)param.GetValue(target);
-//                    _Parameters = new dynamic[array.Length];
-//                    for (int i = 0; i < array.Length; i++)
-//                    {
-//                        _Parameters[i] = array.GetValue(i);
-//                    }
-//                }
-//                else
-//                {
-//                    _Parameters = new dynamic[1] { param.GetValue(target) };
-//                }
-//            }
-//            var method = _TargetType.GetMethod(staticMethodName, BindingFlags.Static);
-
-//            if (!method.IsStatic || method == null)
-//            {
-//                throw new ArgumentException($"{target.name}'s method: {staticMethodName} is not static");
-//            }
-//            _StaticMethod = method;
-//        }
-//    }
-//    private void OnDisable()
-//    {
-//        if (target == null)
-//        {
-//            //call method
-//            _StaticMethod.Invoke(null, _Parameters);
-//        }
-//    }
-//}

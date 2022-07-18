@@ -314,9 +314,6 @@ GameObject:
   - component: {fileID: 2066482915}
   - component: {fileID: 2066482914}
   - component: {fileID: 2066482922}
-  - component: {fileID: 2066482924}
-  - component: {fileID: 2066482926}
-  - component: {fileID: 2066482925}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -432,40 +429,3 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &2066482924
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2066482912}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: baac3eab36df3fb418acafd9a24f8cf7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _Settings: {fileID: 11400000, guid: 6b3a685db2524e2408b0e4774fa66492, type: 2}
---- !u!114 &2066482925
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2066482912}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 069c153497c982d4292b48ec368fda65, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &2066482926
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2066482912}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 069c153497c982d4292b48ec368fda65, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

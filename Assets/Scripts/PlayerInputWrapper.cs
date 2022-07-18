@@ -31,7 +31,7 @@ public class PlayerInputWrapper : MonoBehaviour
     #endregion
 
     #region Methods
-
+    
     private void OnValidate()
     {
         _Settings = InputSettings.Instance;

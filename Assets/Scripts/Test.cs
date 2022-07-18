@@ -14,7 +14,6 @@ using UniRx.Triggers;
 using UnityEngine;
 #endregion
 
-[OnComponentRemove("hi")]
 public class Test : MonoBehaviour
 {
     #region Variables
@@ -27,6 +26,12 @@ public class Test : MonoBehaviour
     void Start()
     {     
         Observable.EveryUpdate().Subscribe(_ => Debug.Log("Hello world update"));
+    }
+
+    [OnComponentRemoveMethod]
+    static public void ComponentRemoved()
+    {
+        Debug.Log("Component Removed events");
     }
     #endregion Methods
 }
