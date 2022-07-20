@@ -60,13 +60,9 @@ public class PlayerInputWrapper : MonoBehaviour
 
     private void UpdateEditor() 
     {
-        _PlayerScript = Optional(_PlayerScript).
-                        IfNoneUnsafe(GetComponent<PlayerInput>());
+       
 
-        foreach (var item in _PlayerScript.actions)
-        {
-            //item.activeControl.valueType;
-        }
+        //Debug.Log();
     }
 
     //private void Reset()

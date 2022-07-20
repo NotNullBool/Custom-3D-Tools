@@ -14,7 +14,7 @@ using UniRx.Triggers;
 using UnityEngine;
 #endregion
 
-public class Test : MonoBehaviour
+public class Test : UnityEngine.InputSystem.PlayerInput
 {
     #region Variables
 
@@ -25,13 +25,13 @@ public class Test : MonoBehaviour
     /// </summary>
     void Start()
     {     
-        Observable.EveryUpdate().Subscribe(_ => Debug.Log("Hello world update"));
+        //Observable.EveryUpdate().Subscribe(_ => Debug.Log("Hello world update"));
     }
 
-    [OnComponentRemoveMethod]
-    static public void ComponentRemoved()
-    {
-        Debug.Log("Component Removed events");
-    }
+    //[OnComponentRemoveMethod]
+    //static public void ComponentRemoved()
+    //{
+    //    Debug.Log("Component Removed events");
+    //}
     #endregion Methods
 }
