@@ -12,5 +12,4 @@ namespace NullBool.Extensions
             return output;
         }
     }
-    }
 }
