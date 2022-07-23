@@ -47,23 +47,23 @@ public class ObservableEditor : Editor
         base.DrawPreview(previewArea);
     }
 
-    private static Subject<(SerializedObject, UnityEngine.Object, string)> _EveryGetInfoString = new Subject<(SerializedObject, UnityEngine.Object, string)>();
-    public static IObservable<(SerializedObject SerializedObject, UnityEngine.Object Target, string @base)> EveryGetInfoString = _EveryGetInfoString.AsObservable();
+    private static Subject<(SerializedObject, UnityEngine.Object, Func<string>)> _EveryGetInfoString = new Subject<(SerializedObject, UnityEngine.Object, Func<string>)>();
+    public static IObservable<(SerializedObject SerializedObject, UnityEngine.Object Target, Func<string> @base)> EveryGetInfoString = _EveryGetInfoString.AsObservable();
     public override string GetInfoString()
     {
-        var @base = base.GetInfoString();
+        Func<string> @base = () => base.GetInfoString();
         _EveryGetInfoString.OnNext((serializedObject, target, @base));
-        return @base;
+        return @base();
     }
 
-    private static Subject<(SerializedObject, UnityEngine.Object, GUIContent)> _EveryGetPreviewTitle = new Subject<(SerializedObject, UnityEngine.Object, GUIContent)>();
-    public static IObservable<(SerializedObject SerializedObject, UnityEngine.Object Target, GUIContent @base)> EveryGetPreviewTitle = _EveryGetPreviewTitle.AsObservable();
+    private static Subject<(SerializedObject, UnityEngine.Object, Func<GUIContent>)> _EveryGetPreviewTitle = new Subject<(SerializedObject, UnityEngine.Object, Func<GUIContent>)>();
+    public static IObservable<(SerializedObject SerializedObject, UnityEngine.Object Target, Func<GUIContent> @base)> EveryGetPreviewTitle = _EveryGetPreviewTitle.AsObservable();
 
     public override GUIContent GetPreviewTitle()
     {
-        var @base = base.GetPreviewTitle();
+        Func<GUIContent> @base = () => base.GetPreviewTitle();
         _EveryGetPreviewTitle.OnNext((serializedObject, target, @base));
-        return @base;
+        return @base();
     }
 
     private static Subject<(SerializedObject, UnityEngine.Object, bool)> _EveryHasPreviewGUI = new Subject<(SerializedObject, UnityEngine.Object, bool)>();
