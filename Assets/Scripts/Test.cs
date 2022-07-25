@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
+using UnityEditor;
 #endregion
 
 public class Test : UnityEngine.InputSystem.PlayerInput
@@ -24,7 +25,8 @@ public class Test : UnityEngine.InputSystem.PlayerInput
     /// <see cref="Start"/> is called before the first frame update
     /// </summary>
     void Start()
-    {     
+    {
+        
         //Observable.EveryUpdate().Subscribe(_ => Debug.Log("Hello world update"));
     }
 

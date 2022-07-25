@@ -1,11 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-
+#if UNITY_EDITOR
 using UnityEditor;
-
+#endif
+using System.Diagnostics.Contracts;
 using UnityEngine;
-using LanguageExt;
 using static LanguageExt.Prelude;
 using static NullBool.ConstLib;
 
@@ -13,6 +10,7 @@ namespace NullBool.Extensions
 {
     public static class ScriptableObjectExtensions
     {
+
         /// <summary>
         /// Creates an asset at "<paramref name="assetPath"/>/<paramref name="assetName"/>.asset"
         /// </summary>
@@ -35,8 +33,10 @@ namespace NullBool.Extensions
         [Pure]
         public static T CreateAsset<T>(string assetPath, string assetName = null) where T : ScriptableObject
         {
-            assetName ??= typeof(T).ToString();
             T asset = ScriptableObject.CreateInstance<T>();
+
+            #if UNITY_EDITOR
+            assetName ??= typeof(T).ToString();
 
             string[] folders = assetPath.Split("/");
             for (int i = 0; i < folders.Length; i++)
@@ -51,6 +51,7 @@ namespace NullBool.Extensions
 
             AssetDatabase.CreateAsset(asset, $"{assetPath}/{assetName}.asset");
             AssetDatabase.SaveAssets();
+            #endif
 
             return asset;
         }
@@ -67,9 +68,13 @@ namespace NullBool.Extensions
         /// <returns>Asset of type: <typeparamref name="T"/></returns>
         /// <inheritdoc cref="LoadAsset{T}(T, string, bool)"/>
         [Pure]
+        #if UNITY_EDITOR
         public static T LoadAsset<T>(this T @this,string assetLocation, bool useEditorDefaultResourceFolder = false) where T : ScriptableObject
             => useEditorDefaultResourceFolder ? (T)EditorGUIUtility.Load(assetLocation) : (T)Resources.Load(assetLocation);
-
+        #else
+        public static T LoadAsset<T>(this T @this, string assetLocation, bool useEditorDefaultResourceFolder = false) where T : ScriptableObject
+            => Optional((T)Resources.Load(assetLocation)).IfNone(ScriptableObject.CreateInstance<T>());
+        #endif
 
 
         /// <summary>

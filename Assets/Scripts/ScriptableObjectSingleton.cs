@@ -7,20 +7,15 @@
 #endregion
 
 #region Imports
-using System.Collections;
-using System.Collections.Generic;
-using System.Text;
 using static NullBool.ConstLib;
-using LanguageExt;
 using static LanguageExt.Prelude;
-using UnityEditor;
 using UnityEngine;
 using static NullBool.Extensions.ScriptableObjectExtensions;
-using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Contracts;
+using Unity.VisualScripting;
 #endregion
 
-public abstract class ScriptableObjectSingleton<T> : ScriptableObject where T : ScriptableObjectSingleton<T>
+
+public abstract class ScriptableObjectSingleton : ScriptableObject
 {
     #region Variables    
     private const string DEFAULT_PATH_INSIDE_RESOURCE_FOLDER = "ScriptableObjects";
@@ -34,35 +29,32 @@ public abstract class ScriptableObjectSingleton<T> : ScriptableObject where T : 
     private static string _ResourceFolderPath = null;
     protected static string p_ResourceFolderPath { get => _ResourceFolderPath ?? DEFAULT_RESOURCE_FOLDER_PATH;
                                                    set => _ResourceFolderPath ??= value; }
+    internal string ResourceFolderPath => p_ResourceFolderPath;
 
     protected static bool p_UseEditorDefaultResourcesFolder = false;
 
-    private static T _Instance;
-    public static T Instance
+    private static ScriptableObjectSingleton _Instance;
+    internal ScriptableObjectSingleton Instance { get => _Instance; set => _Instance = value; }
+    public static T GetInstance<T>() where T : ScriptableObjectSingleton
     {
-        get
+        _Instance = Optional(_Instance).IfNone(() =>
         {
+            var assetLocation = $"{p_PathInsideResourceFolder}/{typeof(T).ToString()}";
 
-            return _Instance = Optional(_Instance).IfNone(() => 
-            {
-                var assetLocation = $"{p_PathInsideResourceFolder}/{typeof(T).ToString()}";
-
-                var assetPath = p_UseEditorDefaultResourcesFolder ? $"{p_ResourceFolderPath}/{RESOURCES}/{p_PathInsideResourceFolder}" :
-                                                                    $"{ASSETS}/{EDITOR_DEFAULT_RESOURCES}/{p_PathInsideResourceFolder}";
-                var assetName = typeof(T).ToString();
+            var assetPath = p_UseEditorDefaultResourcesFolder ? $"{ASSETS}/{EDITOR_DEFAULT_RESOURCES}/{p_PathInsideResourceFolder}" :
+                                                                 $"{p_ResourceFolderPath}/{RESOURCES}/{p_PathInsideResourceFolder}";
+            var assetName = typeof(T).ToString();
 
 
 
-                var instance = Optional(LoadAsset<T>(assetLocation, p_UseEditorDefaultResourcesFolder)).
-                               IfNone(() => CreateAsset<T>(assetPath, assetName));
+            var instance = Optional(LoadAsset<T>(assetLocation, p_UseEditorDefaultResourcesFolder)).
+                       IfNone(() => CreateAsset<T>(assetPath, assetName));
 
-                instance.OnInit();
-
-                return instance;
-            });
-        }
+            instance.InvokeOnInit();
+            return instance;
+        });
+        return (T)_Instance;
     }
-
 
     #endregion
     #region Methods
@@ -71,5 +63,6 @@ public abstract class ScriptableObjectSingleton<T> : ScriptableObject where T : 
     /// Called when first instance created.
     /// </summary>
     protected virtual void OnInit() { }
+    internal void InvokeOnInit() => OnInit();
     #endregion Methods
 }

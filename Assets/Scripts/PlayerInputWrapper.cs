@@ -34,7 +34,7 @@ public class PlayerInputWrapper : MonoBehaviour
     
     private void OnValidate()
     {
-        _Settings = InputSettings.Instance;
+        _Settings = InputSettings.GetInstance<InputSettings>();
     }
     /// <summary>
     /// <see cref="Start"/> is called before the first frame update

@@ -7,29 +7,20 @@
 #endregion
 
 #region Imports
-using System.Collections;
-using System.Collections.Generic;
-using UniRx;
-using UniRx.Triggers;
 using UnityEngine.InputSystem.UI;
-using UnityEditor.Presets;
 using NaughtyAttributes;
-using LanguageExt;
 using static LanguageExt.Prelude;
 using UnityEngine;
 using UnityEngine.InputSystem;
 #endregion
 
-public class InputSettings : ScriptableObjectSingleton<InputSettings>
+public class InputSettings : ScriptableObjectSingleton
 {
     #region Variables
     [Required("Input Action Asset Required")]
     [SerializeField] private InputActionAsset _InputActionsAsset;
     [SerializeField] private InputSystemUIInputModule _UIInputModule;
     [SerializeField] private Camera _Camera;
-
-
-    //Add functionality for presets as well
 
     public void ApplyToPlayerInput(PlayerInput playerInput, InputActionAsset inputActions = null, InputSystemUIInputModule uIInputModule = null, Camera camera = null)
     {

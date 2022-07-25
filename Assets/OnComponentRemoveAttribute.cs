@@ -7,17 +7,17 @@
 #endregion
 
 #region Imports
-using System.Collections;
-using System.Collections.Generic;
-using System;
-using UniRx;
-using UniRx.Triggers;
 using UnityEngine;
+using System;
+
+#if UNITY_EDITOR
+using UniRx;
 using UnityEditor;
 using System.Reflection;
 using System.Linq;
-using NullBool.Extensions;
-using System.Linq.Expressions;
+using NullBool.UniEditor;
+#endif
+
 #endregion
 
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
@@ -28,10 +28,10 @@ public class OnComponentRemoveMethodAttribute : PropertyAttribute
     #region Methods
     public OnComponentRemoveMethodAttribute()
     {
-
+        
     }
 
-
+    #if UNITY_EDITOR
     [InitializeOnLoadMethod]
     public static void OnComponentRemoved() => ObservableEditor.EveryOnDisable.Select(x =>
     {
@@ -68,7 +68,7 @@ public class OnComponentRemoveMethodAttribute : PropertyAttribute
                     break;
             }
         }
-        return (methods: methods, @params: @params , Target: x.Target);
+        return (methods: methods, @params: @params, Target: x.Target);
     }).Where(x => x.methods.Length() != 0).Subscribe(x =>
     {
         foreach (var method in x.methods)
@@ -76,5 +76,6 @@ public class OnComponentRemoveMethodAttribute : PropertyAttribute
 
         }
     });
+    #endif
     #endregion Methods
 }

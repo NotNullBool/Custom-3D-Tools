@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0344b48e8dd82a0479528345632e9807, type: 3}
   m_Name: InputSettings
   m_EditorClassIdentifier: 
-  _InputActionsAsset: {fileID: -944628639613478452, guid: 6bb3e340ac46e5c4a8968ae7800e11f1, type: 3}
+  _InputActionsAsset: {fileID: 0}
   _UIInputModule: {fileID: 0}
   _Camera: {fileID: 0}
